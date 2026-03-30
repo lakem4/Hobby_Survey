@@ -1,0 +1,211 @@
+# Product Requirements Document: Gym Experience & Frustration Survey
+
+## Overview
+
+Build a short web-based survey targeted at gym users that collects information about their gym habits, frustrations, and overall experience. The app has two pages: a survey form and a results page showing aggregated responses. Responses are stored in a Supabase PostgreSQL database.
+
+---
+
+## Tech Stack
+
+- **Framework:** Vite + React  
+- **Database:** Supabase (PostgreSQL)  
+- **Hosting:** Azure Static Web Apps  
+- **Charting:** Recharts  
+
+---
+
+## Survey Questions
+
+The survey must include the following seven questions, using the specified input types:
+
+| #   | Question                                      | Input Type     |
+| --- | --------------------------------------------- | -------------- |
+| 1   | How often do you go to the gym?               | Dropdown list  |
+| 2   | How would you rate your gym experience?       | Radio buttons  |
+| 3   | What frustrates you most at the gym?          | Checkboxes     |
+| 4   | What time do you usually go to the gym?       | Dropdown list  |
+| 5   | Do you feel anxious at the gym?               | Radio buttons  |
+| 6   | What is your biggest challenge at the gym?    | Text input     |
+| 7   | What would improve your gym experience?       | Checkboxes     |
+
+### Question Details
+
+**Q1 — Gym Frequency**
+
+- Dropdown list with options:
+  - Daily  
+  - 4–6 times per week  
+  - 2–3 times per week  
+  - Once a week  
+  - Rarely  
+- Required field  
+
+**Q2 — Experience Rating**
+
+- Radio button group with options:
+  - Excellent  
+  - Good  
+  - Average  
+  - Poor  
+- Required field  
+
+**Q3 — Gym Frustrations (select all that apply)**
+
+- Checkboxes with options:
+  - Too crowded  
+  - Long wait times for machines  
+  - Intimidating environment  
+  - Lack of guidance/workout plan  
+  - Dirty equipment  
+  - Other  
+- If "Other" is selected, display a text input for explanation  
+- At least one option must be selected  
+
+**Q4 — Time of Visit**
+
+- Dropdown list:
+  - Early morning (5–8 AM)  
+  - Late morning (8–11 AM)  
+  - Afternoon (12–4 PM)  
+  - Evening (5–8 PM)  
+  - Night (8 PM+)  
+- Required field  
+
+**Q5 — Gym Anxiety**
+
+- Radio button group:
+  - Yes, often  
+  - Sometimes  
+  - Rarely  
+  - Never  
+- Required field  
+
+**Q6 — Biggest Challenge**
+
+- Free-text input  
+- Placeholder: "Describe your biggest challenge..."  
+- Required field  
+
+**Q7 — Improvements (select all that apply)**
+
+- Checkboxes with options:
+  - Less crowded environment  
+  - Structured workouts provided  
+  - Smaller group settings  
+  - Better equipment availability  
+  - More beginner-friendly atmosphere  
+- At least one option must be selected  
+
+---
+
+## Form Behavior
+
+- All fields are required; display inline validation errors if incomplete  
+- "Other" input fields appear dynamically when selected  
+- On successful submission, display a confirmation page with a summary of responses  
+- The confirmation page includes:
+  - "View Results" button → navigates to results page  
+- Submit button shows "Submitting..." while processing  
+- If submission fails, show an error message and retain inputs  
+
+---
+
+## Results Page
+
+A separate `/results` route displays aggregated, anonymized data from all submissions. Individual responses are not shown.
+
+### Charts / Visualizations
+
+1. **Total Responses** — displayed prominently  
+2. **Gym Frequency Distribution** — vertical bar chart  
+3. **Top Gym Frustrations** — horizontal bar chart sorted by count  
+4. **Gym Anxiety Levels** — bar or pie chart  
+5. **Preferred Gym Times** — bar chart  
+
+Use a charting library such as Recharts.
+
+### Navigation
+
+- Home page includes:
+  - "Take the Survey" button  
+  - "View Results" button  
+- Results page includes a "Home" button  
+- Survey form includes a "View Results" button in the header  
+
+---
+
+## Database
+
+### Tables and security
+
+I am using my own Supabase account.  
+Give me the SQL I need to run in the Supabase SQL Editor to create the table and configure access.  
+This is a public survey with no authentication so I need row level security.
+
+### Environment Variables
+
+The app connects to Supabase using two environment variables:
+
+| Variable                 | Description                        |
+| ------------------------ | ---------------------------------- |
+| `VITE_SUPABASE_URL`      | Your Supabase project URL          |
+| `VITE_SUPABASE_ANON_KEY` | Your Supabase anon/public key      |
+
+- For local development, store in `.env`  
+- Add `.env` to `.gitignore`  
+- For production, use GitHub Actions secrets  
+
+---
+
+## Design & Quality Standards
+
+### Appearance
+
+- Clean, minimalist design  
+- Light background with dark text  
+- Primary accent color: `#8A3BDB`  
+- Do not use accent color for body text  
+- Maintain strong contrast for readability  
+
+### Responsive Layout
+
+- Must work on mobile, tablet, and desktop  
+- Single-column layout for small screens  
+
+### HTML5 Validation
+
+All pages must pass HTML5 validation with no errors.
+
+### Accessibility — WCAG 2.1 Level AA
+
+- All inputs must have `<label>` elements  
+- Error messages must be accessible via `aria-describedby`  
+- Dynamic fields must be keyboard accessible  
+- All interactive elements must be keyboard usable  
+- Maintain proper color contrast  
+- Do not rely on color alone for meaning  
+
+---
+
+## Footer
+
+Every page displays:
+
+> Survey by Lake Mauer, BAIS:3300 - spring 2026.
+
+---
+
+## Deployment
+
+This app is deployed as an **Azure Static Web App** using Vite + React.
+
+Because the app uses client-side routing (`/` and `/results`), include the following file in `public/`:
+
+```json
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/assets/*"]
+  }
+}

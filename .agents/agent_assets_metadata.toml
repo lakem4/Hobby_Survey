@@ -1,0 +1,14 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "MysSlP6fvq2DiHDeoZ8-M"
+uri = "file://README.md"
+type = "text"
+title = "README.md — Gym Experience & Frustration Survey"
+
+[[outputs]]
+id = "7E4nXRau8CFE9exzJrkwL"
+uri = "file://WORKING_NOTES.md"
+type = "text"
+title = "WORKING_NOTES.md — Gym Experience & Frustration Survey"
